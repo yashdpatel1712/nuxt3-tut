@@ -1,12 +1,12 @@
 <template>
     <div>
-        <p class="text-3xl font-bold flex justify-center m-6"> iphone {{ name }}</p>
+        <p class="text-3xl font-bold flex justify-center m-6"> {{ name }}</p>
         <div class ="flex justify-center py-8 gap-8">
             <div>
-                <img :src="`/images/iphone_${url}.jpg`" alt="" class="w-60">
+                <img :src="`/images/samsung_${url}.jpg`" alt="" class="w-60">
             </div>
             <div class="item-button flex justify-center items-center flex-col text-start w-64">
-                <p class="text-xl font-bold text-start">{{ iphonePrice(fullName) }}</p>
+                <p class="text-xl font-bold text-start">{{ samsungPrice(fullName) }}</p>
                 <div>
                     <!-- <counter value="counter" :is="counter" /> -->
                     <counter v-model:count="counterValue" />
@@ -24,7 +24,7 @@
 
 <script setup>
 
-const iphones = useIphones();
+const samsungs = useSamsungs();
 const route = useRoute();
 const counterValue = ref(1);
 
@@ -37,7 +37,7 @@ const url = computed(() => {
     return route.params.name.replaceAll('-','_')
 })
 const fullName = computed(() => {
-    return `iphone-${route.params.name}`
+    return `samsung-${route.params.name}`
 })
 
 const cart = useCart();
@@ -48,7 +48,7 @@ function isInCart () {
 }
 function addToCart(){
   if(!isInCart()){
-    const phone = iphones.find(item => item.name === fullName.value);
+    const phone = samsungs.find(item => item.name === fullName.value);
     if (phone) {
       cart.value.push({ 
         name: phone.name,
@@ -61,14 +61,14 @@ function addToCart(){
   }
 }
 
-function iphonePrice(name) {
-    const found = iphones.find((cartItem) => cartItem.name === name);
+function samsungPrice(name) {
+    const found = samsungs.find((cartItem) => cartItem.name === name);
     return found?.price;
 }
 
 
 useHead({
-    title: `Nuxt3 - iphone-${route.params.name}`
+    title: `Nuxt3 - samsung-${route.params.name}`
 })
 
 </script>
