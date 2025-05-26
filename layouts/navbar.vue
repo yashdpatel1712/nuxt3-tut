@@ -1,7 +1,9 @@
 <template>
     <nav class="bg-white text-black flex justify-between text-lg shadow-lg px-8 py-6">
         <div class="flex justify-between">
-            <img src="/logo/logo.png" class="w-[200px] h-[50px] object-cover" alt="">
+            <NuxtLink to="/">
+                <img src="/logo/logo.png" class="w-[200px] h-[50px] object-cover" alt="">
+            </NuxtLink>
         </div>
 
         <div class="flex-1/2">
@@ -21,19 +23,20 @@
         </div>
                 
         <div class="flex gap-5 items-center">
-            <NuxtLink to="/cart" class="relative inline-block w-10 h-10">
+            <NuxtLink to="/favourite" class="relative inline-block w-10 h-10">
                 <div class="w-10 h-10 rounded-full bg-white text-Black hover:bg-blue-700 flex hover:text-white items-center justify-center border border-black">
                     <FontAwesomeIcon icon="fa-solid fa-heart" class=" " />
                 </div>
                 <div
+                v-if="wishlist.length > 0"
                     class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 
                         bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex
                          items-center justify-center"
                 >
-                    4
+                    {{ wishlist.length }}
                 </div>
             </NuxtLink>
-                <NuxtLink to="/cart" class="relative inline-block w-10 h-10">
+                <div to="/cart" class="relative group inline-block w-10 h-10">
                     <div class="w-10 h-10 rounded-full bg-white text-Black hover:bg-blue-700 flex hover:text-white items-center justify-center border border-black">
                         <FontAwesomeIcon icon="fa-solid fa-shopping-cart" class=" " />
                     </div>
@@ -46,7 +49,45 @@
                         {{ itemsOfCart() }}
                     </div>
                     
-                </NuxtLink>
+
+
+                    <div v-if="cart.length > 0"
+                    class="max-h-100 overflow-y-auto p-4 absolute -right-50 mt-2 mr-50 w-100 bg-white border border-gray-200 shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50"
+                    >
+                    <div class="flex justify-between px-6 pb-4">
+                        <span>{{ itemsOfCart() }} items</span>
+                        <NuxtLink to="/cart" class="hover:text-blue-500 font-bold">view cart</NuxtLink>
+                    </div>
+                    <hr class="text-gray-300">
+                        <div v-for="phone in cart"
+                            class="flex flex-col ">
+                            <div class="flex flex-row py-8 gap-4 ">
+                                
+                                <div class="border border-gray-300 p-4">
+                                    <img :src="`/images/${phone.name.replaceAll('-','_')}.jpg`" alt="" class="w-10">
+                                </div>
+                                <div class="flex flex-col">
+
+                                    <div>
+                                        {{ phone.name }}
+                                    </div>
+                                    <div class="text-gray-400">
+                                        {{ phone.qty }} X {{ phone.price }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <hr class="text-gray-300">
+                            </div>
+                        </div>
+                        <div class="flex flex-row justify-between">
+                            <span class="font-bold">Total Price:</span>
+                            <span>₹ {{totalPrice()}}</span>
+                        </div>
+                    </div>
+
+
+                </div>
 
         </div>
         <!-- <NuxtLink v-else to="/login">Login</NuxtLink> -->
@@ -107,6 +148,7 @@
 <script setup>
 const cart = useCart();
 const auth = useAuth();
+const wishlist = useWishlist();
 
 function logout(){
     auth.value.isAuth = false;
@@ -118,7 +160,15 @@ function itemsOfCart() {
     total+= item.qty;
   });
     return total;
-  
-
 }
+function totalPrice() {
+  let total = 0;
+  cart.value.forEach(item => {
+    const numericPrice = parseInt(item.price.replace(/[₹,]/g, ''));
+    const numericPriceQty = item.qty * numericPrice    
+    total+= numericPriceQty;
+  });
+    return total.toLocaleString('en-IN');
+  }
+  
 </script>

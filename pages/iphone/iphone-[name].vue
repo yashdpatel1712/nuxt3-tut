@@ -13,8 +13,16 @@
                 </div>
                 <div class="flex justify-center items-center shrink pt-6">
                     <button @click="addToCart" >
-                        <span v-if="!isInCart()" class="rounded-full bg-blue-500 text-white px-6 py-2 hover:bg-blue-600">Add to cart</span>
+                        <span v-if="!isInCart()" class="rounded-full bg-green-500 text-white px-6 py-2 hover:bg-green-600">Add to cart</span>
                         <span v-else class="rounded-full bg-yellow-500 text-white px-6 py-2 hover:bg-yellow-600">Remove from the cart</span>
+                    </button>
+                </div>
+
+                <div class="mt-15">
+                    <button @click="addToWishlist()">
+                        <span v-if="!isInWishlist()" class="rounded-full bg-blue-500 text-white px-6 py-2 hover:bg-blue-600">Add to wishlist</span>
+                        <span v-else class="rounded-full bg-red-500 text-white px-6 py-2 hover:bg-red-600">Remove to wishlist</span>
+
                     </button>
                 </div>
             </div>
@@ -27,6 +35,8 @@
 const iphones = useIphones();
 const route = useRoute();
 const counterValue = ref(1);
+const cart = useCart();
+const wishlist = useWishlist();
 
 const name = computed(() => {
     return route.params.name.replaceAll('-',' ')
@@ -40,7 +50,6 @@ const fullName = computed(() => {
     return `iphone-${route.params.name}`
 })
 
-const cart = useCart();
 
 function isInCart () {
   const names = cart.value.map(item => item.name);
@@ -53,6 +62,7 @@ function addToCart(){
       cart.value.push({ 
         name: phone.name,
         price: phone.price,
+        brand: phone.brand,
         qty: counterValue.value
       });
     }
@@ -60,6 +70,26 @@ function addToCart(){
     cart.value = cart.value.filter(item => item.name !== fullName.value);
   }
 }
+
+function isInWishlist(){
+    const wishName = wishlist.value.map(item=>item.name);
+    return wishName.includes(fullName.value);
+}
+
+function addToWishlist() {
+    if(!isInWishlist()){
+        const wishPhone = iphones.find(item => item.name === fullName.value);
+        wishlist.value.push({
+            name: wishPhone.name,
+            price: wishPhone.price,
+            brand: wishPhone.brand,
+        })
+    } else {
+        wishlist.value = wishlist.value.filter(item =>item.name !== fullName.value);
+    }
+}
+
+
 
 function iphonePrice(name) {
     const found = iphones.find((cartItem) => cartItem.name === name);

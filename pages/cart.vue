@@ -6,26 +6,26 @@
       </p>
       <div class="mx-8">
         <NuxtLink 
-          v-for="iphone in cart"
-          :key="iphone.name"
-          :to="`/iphone/${iphone.name}`"
+          v-for="phone in cart"
+          :key="phone.name"
+          :to="`/${phone.brand}/${phone.name}`"
           class="flex gap-8 items-center p-8 border-b-2 border-gary-500"
         >
           <div>
-            <img :src="`/images/${iphone.name.replaceAll('-', '_')}.jpg`" alt="" class="w-24 h-auto">
+            <img :src="`/images/${phone.name.replaceAll('-', '_')}.jpg`" alt="" class="w-24 h-auto">
           </div>
           <div class="flex-1 text-xl font-bold">
-            {{ iphone.name }}
+            {{ phone.name }}
           </div>
           <div class="flex  text-xl gap-2">
             <div>qty:</div>
-            <div>{{ iphone.qty }} X {{ iphone.price }}</div>
+            <div>{{ phone.qty }} X {{ phone.price }}</div>
           </div>
 
           <div class="text-xl font-bold"> = </div>
-          <div class="flex-1 text-xl font-bold">{{ totalPriceSingleItem(iphone.qty , iphone.price) }}</div>
+          <div class="flex-1 text-xl font-bold">{{ totalPriceSingleItem(phone.qty , phone.price) }}</div>
 
-          <button @click.prevent="removeFromCart(iphone.name)" class="bg-red-500 text-white px-3 py-1 rounded flex gap-2">
+          <button @click.prevent="removeFromCart(phone.name)" class="bg-red-500 text-white px-3 py-1 rounded flex gap-2">
             Remove<p class="font-bold">X</p>
           </button>
         
