@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center text-4xl font-bold">
-    <!-- <button @click="welcomedata">toggle</button> -->
-    <!-- <counter :is="counter" /> -->
-    <!-- <HomeWelcome /> -->
-    <!-- <NuxtRouteAnnouncer /> -->
-    <!-- <NuxtWelcome /> -->
-     <p>welcome to home page</p>
+  <div class="mx-auto max-w-7xl px-4 py-6 md:px-8">
+    <HomeSlider />
+  
+    <HomeFeature />
+
+
+
+    <div class=" tending-product flex flex-col mt-40">
+      <div class="flex flex-col items-center">
+        <p class="text-5xl font-bold">Trending Product</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-  const counter = shallowRef(resolveComponent("counter"));
-
-  function welcomedata() {
-    counter.value = resolveComponent("HomeWelcome");
-  }
 
 </script>
